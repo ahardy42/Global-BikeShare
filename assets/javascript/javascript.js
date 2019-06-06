@@ -6,10 +6,7 @@ $(document).ready(function() {
         iconSize: [16, 16]
     });
 
-    var locationIcon = L.divIcon({
-        html: "<i class=\"fas fa-walking\"></i>",
-        iconSize: [16, 16]
-    })
+    var locationIcon = L.circleMarker();
    
     // initialize a map of the world in the background
     var map = L.map('map', {
@@ -110,7 +107,8 @@ $(document).ready(function() {
      map.on("locationfound", async function(event) {
         // add a small marker to the location
         // L.marker(event.latlng, {icon: locationIcon}).addTo(map);
-        L.circleMarker(event.latlng).addTo(map);
+        //L.circleMarker(event.latlng).addTo(map);
+        locationIcon.setLatLng(event.latlng).addTo(map);
         // get the share that is closest
         if (!closestShare) {
             closestShare = findClosestShare(event, networkArray); // set the closest share to location
