@@ -67,10 +67,19 @@ $(document).ready(function() {
         }
     }
 
+    var getBikes = async function(path) {
+        var response = $.ajax({
+            method: "GET",
+            url: `${url}${path}`
+        });
+        console.log(response);
+    }
+
     // ============= event handlers ====================
 
     // the closest share to you
     var closestShare;
+    var closestShareBikes = [];
 
     // event handler for get location || search location
     $("#find-location").on("click", function (event) {
@@ -85,14 +94,17 @@ $(document).ready(function() {
     });
 
      // watching for a location event
-     map.on("locationfound", function(event) {
+     map.on("locationfound", async function(event) {
         // add a small marker to the location
         // L.marker(event.latlng, {icon: locationIcon}).addTo(map);
         L.circleMarker(event.latlng).addTo(map);
         // get the share that is closest
         if (!closestShare) {
             closestShare = findClosestShare(event, networkArray); // set the closest share to location
+            closestShareBikes = await getBikes(closestShare.options.id);
+            // clear the existing markers from the map
             
+            // populate the map with all the sites
         }
     });
 
