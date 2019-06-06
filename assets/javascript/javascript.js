@@ -68,11 +68,23 @@ $(document).ready(function() {
     }
 
     var getBikes = async function(path) {
-        var response = $.ajax({
+        var response = await $.ajax({
             method: "GET",
             url: `${url}${path}`
         });
-        console.log(response);
+        // console.log(response);
+        var stations = response.network.stations;
+        var stationMarkers = [];
+        stations.forEach(element => {
+            stationMarkers.push(
+                L.marker([element.latitude, element.longitude], {
+                    icon: bikeIcon,
+                    bikes: element.free_bikes,
+                    slots: element.empty_slots
+                })
+            );
+        })
+        return stationMarkers;
     }
 
     // ============= event handlers ====================
@@ -80,6 +92,7 @@ $(document).ready(function() {
     // the closest share to you
     var closestShare;
     var closestShareBikes = [];
+    
 
     // event handler for get location || search location
     $("#find-location").on("click", function (event) {
@@ -103,8 +116,11 @@ $(document).ready(function() {
             closestShare = findClosestShare(event, networkArray); // set the closest share to location
             closestShareBikes = await getBikes(closestShare.options.id);
             // clear the existing markers from the map
-            
+            bikeNetworks.removeFrom(map);
+            layerControl.removeLayer(bikeNetworks);
             // populate the map with all the sites
+            var stations = L.layerGroup(closestShareBikes).addTo(map);
+            layerControl.addOverlay(stations, "Stations");
         }
     });
 
