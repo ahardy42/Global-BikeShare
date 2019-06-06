@@ -1,0 +1,41 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+    width: 100vw;
+}
+
+#start-modal {
+    border-radius: 0.5em;
+    background-color: rgba(225,227,233, 0.8);
+    display: flex; /* Shown Initially */
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: fixed; /* Stay in place */
+    z-index: 500; /* Sit on top */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* center the modal EXACTLY */
+    height: 95%;
+    width: 95%;
+}
+
+.fa-bicycle {
+    font-size: 16px;
+    text-align: center;
+    color: green
+}
+
+.fa-walking {
+    font-size: 16px;
+    text-align: center;
+    color: blue
+}
+
+.leaflet-div-icon {
+    background-color: transparent;
+    border: none
+}
