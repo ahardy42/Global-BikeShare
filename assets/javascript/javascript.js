@@ -98,7 +98,6 @@ $(document).ready(function() {
         $("#start-modal").fadeOut(500);
         map.locate({
             watch: true,
-            setView: true,
             maxZoom: 12
         });
     });
@@ -106,8 +105,7 @@ $(document).ready(function() {
      // watching for a location event
      map.on("locationfound", async function(event) {
         // add a small marker to the location
-        // L.marker(event.latlng, {icon: locationIcon}).addTo(map);
-        //L.circleMarker(event.latlng).addTo(map);
+        map.flyTo(event.latlng, {zoom: 10});
         locationIcon.setLatLng(event.latlng).addTo(map);
         // get the share that is closest
         if (!closestShare) {
