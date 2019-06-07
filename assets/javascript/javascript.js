@@ -104,7 +104,7 @@ $(document).ready(function() {
      // watching for a location event
      map.on("locationfound", async function(event) {
         // add a small marker to the location
-        map.panTo(event.latlng);
+        map.flyTo(event.latlng, 12);
         locationIcon.setLatLng(event.latlng).addTo(map);
         // get the share that is closest
         if (!closestShare) {
