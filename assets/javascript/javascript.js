@@ -10,9 +10,9 @@ $(document).ready(function() {
         var currLayer = station;
         console.log(currLayer);
         currLayer.ratio = currLayer.free_bikes / (currLayer.empty_slots + currLayer.free_bikes);
-        return currLayer.ratio > 0.5 ? "green":
-                     currLayer.ratio > 0.1 ? "yellow":
-                                              "red";
+        return currLayer.ratio > 0.4 ? "#40ff00":
+                     currLayer.ratio > 0.1 ? "#ffbf00":
+                                              "#ff0000";
     }
 
     function makeBikeIcon(station) {
@@ -157,7 +157,6 @@ $(document).ready(function() {
             stations.eachLayer(function(layer) {
                 // bind a popup with station bike availability information
                 makePopup(layer);
-                console.log(layer);
             });
         }
     });
