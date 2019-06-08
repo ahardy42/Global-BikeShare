@@ -6,7 +6,25 @@ $(document).ready(function() {
         iconSize: [16, 16]
     });
 
-    var locationIcon = L.circleMarker();
+    var locationIcon = L.divIcon({
+        html: "<i class=\"fas fa-walking\"></i>",
+        iconSize: [16, 16]
+    });
+
+    var marker = L.circleMarker();
+
+    var makePopup = function(layer) {
+        var infoDiv = document.createElement("div");
+        var bikes = document.createElement("h2");
+        bikes.textContent = `Available Bikes: ${layer.options.bikes}`;
+        var slots = document.createElement("h2");
+        slots.textContent = `Available Slots: ${layer.options.slots}`;
+        infoDiv.appendChild(bikes);
+        infoDiv.appendChild(slots);
+        var popup = L.popup();
+        popup.setContent(infoDiv);
+        layer.bindPopup(popup);
+    }
    
     // initialize a map of the world in the background
     var map = L.map('map', {
@@ -90,6 +108,7 @@ $(document).ready(function() {
     var closestShare;
     var closestShareBikes = [];
     
+    
 
     // event handler for get location || search location
     $("#find-location").on("click", function (event) {
@@ -103,10 +122,9 @@ $(document).ready(function() {
 
      // watching for a location event
      map.on("locationfound", async function(event) {
-        // add a small marker to the location
-       // map.zoom(12).flyTo(event.latlng);
-        console.log(event.latlng);
-        locationIcon.setLatLng(event.latlng).addTo(map);
+        // add a small marker to the location and fly to it on the map
+        marker.setLatLng(event.latlng).addTo(map);
+        map.flyTo(event.latlng, 12);
         // get the share that is closest
         if (!closestShare) {
             closestShare = findClosestShare(event, networkArray); // set the closest share to location
@@ -117,6 +135,10 @@ $(document).ready(function() {
             // populate the map with all the sites
             var stations = L.layerGroup(closestShareBikes).addTo(map);
             layerControl.addOverlay(stations, "Stations");
+            stations.eachLayer(function(layer) {
+                // bind a popup with station bike availability information
+                makePopup(layer);
+            });
         }
     });
 
