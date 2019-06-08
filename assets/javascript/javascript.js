@@ -124,9 +124,9 @@ $(document).ready(function() {
      map.on("locationfound", async function(event) {
         // add a small marker to the location and fly to it on the map
         marker.setLatLng(event.latlng).addTo(map);
-        map.flyTo(event.latlng, 12);
         // get the share that is closest
         if (!closestShare) {
+            map.flyTo(event.latlng, 12);
             closestShare = findClosestShare(event, networkArray); // set the closest share to location
             closestShareBikes = await getBikes(closestShare.options.id);
             // clear the existing markers from the map
