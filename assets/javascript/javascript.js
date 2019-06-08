@@ -13,6 +13,15 @@ $(document).ready(function() {
 
     var marker = L.circleMarker();
 
+    var styleMarker = function(layer) { // returns a color value, need to apply this to the inline styling of each icon at layer.options.icon.html
+        var currLayer = layer;
+        currLayer.ratio = currLayer.options.bikes / (currLayer.options.slots + currLayer.options.bikes);
+        return currLayer.ratio > 0.67 ? "green":
+                     currLayer.ratio > 0.33 ? "yellow":
+                                              "red";
+    }
+
+
     var makePopup = function(layer) {
         var infoDiv = document.createElement("div");
         var bikes = document.createElement("h2");
@@ -115,9 +124,10 @@ $(document).ready(function() {
         event.preventDefault();
         // hide the modal
         $("#start-modal").fadeOut(500);
-        map.locate({
+        var findMe = map.locate({
             watch: true
         });
+        
     });
 
      // watching for a location event
@@ -126,7 +136,7 @@ $(document).ready(function() {
         marker.setLatLng(event.latlng).addTo(map);
         // get the share that is closest
         if (!closestShare) {
-            map.flyTo(event.latlng, 12);
+            map.flyTo(event.latlng, 12); // flies here once 
             closestShare = findClosestShare(event, networkArray); // set the closest share to location
             closestShareBikes = await getBikes(closestShare.options.id);
             // clear the existing markers from the map
@@ -138,6 +148,7 @@ $(document).ready(function() {
             stations.eachLayer(function(layer) {
                 // bind a popup with station bike availability information
                 makePopup(layer);
+                console.log(layer);
             });
         }
     });
