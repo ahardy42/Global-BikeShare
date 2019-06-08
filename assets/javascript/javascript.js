@@ -6,21 +6,30 @@ $(document).ready(function() {
         iconSize: [16, 16]
     });
 
+    var styleMarker = function(station) { // returns a color value, need to apply this to the inline styling of each icon at layer.options.icon.html
+        var currLayer = station;
+        console.log(currLayer);
+        currLayer.ratio = currLayer.free_bikes / (currLayer.empty_slots + currLayer.free_bikes);
+        return currLayer.ratio > 0.5 ? "green":
+                     currLayer.ratio > 0.1 ? "yellow":
+                                              "red";
+    }
+
+    function makeBikeIcon(station) {
+        var color = styleMarker(station);
+        var locationIcon = L.divIcon({
+            html: `<i class='fas fa-bicycle' style='color: ${color}'></i>`,
+            iconSize: [16, 16]
+        });
+        return locationIcon;
+    }
+
     var locationIcon = L.divIcon({
         html: "<i class=\"fas fa-walking\"></i>",
         iconSize: [16, 16]
     });
 
     var marker = L.circleMarker();
-
-    var styleMarker = function(layer) { // returns a color value, need to apply this to the inline styling of each icon at layer.options.icon.html
-        var currLayer = layer;
-        currLayer.ratio = currLayer.options.bikes / (currLayer.options.slots + currLayer.options.bikes);
-        return currLayer.ratio > 0.67 ? "green":
-                     currLayer.ratio > 0.33 ? "yellow":
-                                              "red";
-    }
-
 
     var makePopup = function(layer) {
         var infoDiv = document.createElement("div");
@@ -100,12 +109,12 @@ $(document).ready(function() {
         var stations = response.network.stations;
         var stationMarkers = [];
         stations.forEach(element => {
+            console.log(element);
             stationMarkers.push(
                 L.marker([element.latitude, element.longitude], {
-                    icon: bikeIcon,
                     bikes: element.free_bikes,
                     slots: element.empty_slots
-                })
+                }).setIcon(makeBikeIcon(element))
             );
         })
         return stationMarkers;
